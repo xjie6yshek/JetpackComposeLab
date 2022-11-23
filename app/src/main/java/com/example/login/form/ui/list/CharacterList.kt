@@ -1,5 +1,6 @@
 package com.example.login.form.ui.list
 
+import android.widget.TextView
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,7 +11,6 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
-import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -22,6 +22,7 @@ import com.example.login.form.data.Character
 import com.example.login.form.ui.NavRoutes
 import com.gowtham.ratingbar.RatingBar
 import com.gowtham.ratingbar.RatingBarConfig
+import okhttp3.internal.concurrent.TaskRunner.Companion.logger
 
 @Composable
 fun CharacterList(navController: NavHostController, characters: List<Character>) {
@@ -33,13 +34,15 @@ fun CharacterList(navController: NavHostController, characters: List<Character>)
                     .fillMaxWidth()
                     .clickable(
                         onClick = {
-                            navController.navigate(NavRoutes.Detail.route + "/" + index)
+                            logger.info(index.toString())
+
+                            navController.navigate(NavRoutes.Detail.route + "/" + characters[index].id)
                         }
                     )
             ) {
                 Column{
                     AsyncImage(
-                        model = characters[index].images.icon,
+                        model = characters[index].image_link,
                         contentDescription = null
                     )
 
@@ -48,24 +51,6 @@ fun CharacterList(navController: NavHostController, characters: List<Character>)
                         text = characters[index].name
                     )
 
-                    Row (modifier = Modifier.padding(start = 7.dp, bottom = 10.dp, top = 5.dp)) {
-                        Icon(
-                            painter = painterResource(R.drawable.attack),
-                            contentDescription = null
-                        )
-
-                        Text(
-                            modifier = Modifier.padding(start = 16.dp, top = 16.dp, bottom = 5.dp),
-                            text = characters[index].attack_type
-//                            text = characters[index].attack_type,
-////                            powerstats.power.toFloat() / 20,
-//                            config = RatingBarConfig()
-//                                .size(15.dp)
-//                                .numStars(5),
-//                            onValueChange = {},
-//                            onRatingChanged = {}
-                        )
-                    }
                 }
 
             }

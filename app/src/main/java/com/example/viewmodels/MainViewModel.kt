@@ -8,7 +8,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.login.form.api.RetrofitHelper
 import com.example.login.form.data.Character
-import com.example.login.form.data.Stats
 import com.example.login.form.db.CharacterRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -24,8 +23,6 @@ class MainViewModel @Inject constructor(
     private val repo: CharacterRepository
 ):ViewModel() {
     var characterList:List<Character> by mutableStateOf(arrayListOf())
-
-    var stats:List<Stats> by mutableStateOf(arrayListOf())
 
     var errorMessage: String by mutableStateOf("")
 

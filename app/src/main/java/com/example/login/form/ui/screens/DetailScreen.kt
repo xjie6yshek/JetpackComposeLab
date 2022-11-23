@@ -19,7 +19,14 @@ import androidx.compose.ui.layout.positionInParent
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
+import okhttp3.internal.concurrent.TaskRunner
+import okhttp3.internal.concurrent.TaskRunner.Companion.logger
+import java.util.logging.Logger
 import kotlin.math.roundToInt
 
 @OptIn(
@@ -51,9 +58,10 @@ fun DetailScreen(
     ) {
         if (id != null) {
             val characterId = id.toInt()
+            logger.info("detal " + id.toInt().toString())
 
             AsyncImage(
-                model = viewModel.characterList[characterId].images.img,
+                model = viewModel.characterList[characterId].image_link,
                 contentDescription = null,
                 modifier = Modifier.width(configuration.screenWidthDp.dp + 3.dp),
                 contentScale = ContentScale.FillWidth
@@ -63,6 +71,15 @@ fun DetailScreen(
                 Text(
                     text = viewModel.characterList[characterId].name,
                     fontSize = 30.sp,
+                )
+
+                var latin_name = viewModel.characterList[characterId].latin_name
+
+                if (latin_name == "") latin_name = viewModel.characterList[characterId].name
+
+                Text(
+                    text = "Latin name: $latin_name",
+                    fontSize = 20.sp, fontWeight = FontWeight.Bold
                 )
 
                 Spacer(modifier = Modifier.height(15.dp))
@@ -76,11 +93,30 @@ fun DetailScreen(
                 Spacer(modifier = Modifier.height(15.dp))
 
                 Text(
-                    text = viewModel.characterList[characterId].attack_type,
+                    text = "Habitat ${viewModel.characterList[characterId].habitat}",
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.onGloballyPositioned { coordinates ->
                         scrollToPosition = coordinates.positionInParent().y
-                    }
+                    },
+                    fontSize = 20.sp
+                )
+
+                Text(
+                    text = "Diet ${viewModel.characterList[characterId].diet}",
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.onGloballyPositioned { coordinates ->
+                        scrollToPosition = coordinates.positionInParent().y
+                    },
+                    fontSize = 20.sp
+                )
+
+                Text(
+                    text = "Geo range ${viewModel.characterList[characterId].geo_range}",
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.onGloballyPositioned { coordinates ->
+                        scrollToPosition = coordinates.positionInParent().y
+                    },
+                    fontSize = 20.sp
                 )
 
                 Spacer(modifier = Modifier.height(10.dp))

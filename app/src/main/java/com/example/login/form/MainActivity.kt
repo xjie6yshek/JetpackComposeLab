@@ -22,6 +22,7 @@ import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import dagger.hilt.android.AndroidEntryPoint
+import okhttp3.internal.concurrent.TaskRunner.Companion.logger
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {

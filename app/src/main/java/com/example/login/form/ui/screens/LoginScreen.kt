@@ -1,4 +1,5 @@
 
+import android.view.KeyEvent
 import android.widget.Toast
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -11,6 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
@@ -27,6 +29,7 @@ import com.example.login.form.ui.NavRoutes
 import com.example.login.form.ui.theme.LoginFormTheme
 import com.example.utils.Keyboard
 import com.example.utils.keyboardAsState
+import java.util.logging.Logger
 
 @Composable
 fun LoginScreen(navController: NavHostController) {
@@ -146,11 +149,17 @@ fun joinButton(navController: NavHostController, username: String, password: Str
 
 @Composable
 fun passwordInput(placeholder: String, text: String, onTextChange: (String) -> Unit) {
+    val pattern = remember { Regex("^[^\\t\\n]*\$") }
     val focusManager = LocalFocusManager.current
 
     OutlinedTextField(
         value = text,
-        onValueChange =  { onTextChange(it) },
+        onValueChange =  {
+            if (it.isEmpty() || it.matches(pattern))
+            {
+                onTextChange(it)
+            }
+        },
         placeholder = { Text(
             text = placeholder,
             fontSize = 20.sp,
@@ -160,24 +169,34 @@ fun passwordInput(placeholder: String, text: String, onTextChange: (String) -> U
             .width(287.dp)
             .height(56.dp)
             .background(Color.Transparent)
-            .border(2.dp, color = Color.Black, shape = RoundedCornerShape(10.dp)),
-        keyboardActions = KeyboardActions(onDone = {
-            focusManager.moveFocus(FocusDirection.Next)
-        }),
+            .border(2.dp, color = Color.Black, shape = RoundedCornerShape(10.dp))
+            .onKeyEvent {
+                if (it.nativeKeyEvent.keyCode == KeyEvent.KEYCODE_ENTER) {
+                    focusManager.moveFocus(FocusDirection.Next)
+                }
+                false
+            },
         keyboardOptions = KeyboardOptions(
             keyboardType = KeyboardType.Password
         ),
+
         visualTransformation = PasswordVisualTransformation()
     )
 }
 
 @Composable
 fun usernameInput(placeholder: String, text: String, onTextChange: (String) -> Unit) {
+    val pattern = remember { Regex("^[^\\t\\n]*\$") }
     val focusManager = LocalFocusManager.current
 
     OutlinedTextField(
         value = text,
-        onValueChange =  { onTextChange(it) },
+        onValueChange =  {
+            if (it.isEmpty() || it.matches(pattern))
+            {
+                onTextChange(it)
+            }
+        },
         placeholder = { Text(
             text = placeholder,
             fontSize = 20.sp,
@@ -187,23 +206,34 @@ fun usernameInput(placeholder: String, text: String, onTextChange: (String) -> U
             .width(287.dp)
             .height(56.dp)
             .background(Color.Transparent)
-            .border(2.dp, color = Color.Black, shape = RoundedCornerShape(10.dp)),
-        keyboardActions = KeyboardActions(onDone = {
-            focusManager.moveFocus(FocusDirection.Next)
-        }),
+            .border(2.dp, color = Color.Black, shape = RoundedCornerShape(10.dp))
+            .onKeyEvent {
+                if (it.nativeKeyEvent.keyCode == KeyEvent.KEYCODE_ENTER) {
+                    focusManager.moveFocus(FocusDirection.Next)
+                }
+                false
+            },
         keyboardOptions = KeyboardOptions(
-            keyboardType = KeyboardType.Text
+            keyboardType = KeyboardType.Password
         ),
     )
 }
 
 @Composable
 fun emailInput(placeholder: String, text: String, onTextChange: (String) -> Unit) {
+    val pattern = remember { Regex("^[^\\t\\n]*\$") }
     val focusManager = LocalFocusManager.current
+
+
 
     OutlinedTextField(
         value = text,
-        onValueChange =  { onTextChange(it) },
+        onValueChange =  {
+            if (it.isEmpty() || it.matches(pattern))
+            {
+                onTextChange(it)
+            }
+        },
         placeholder = { Text(
             text = placeholder,
             fontSize = 20.sp,
@@ -213,7 +243,13 @@ fun emailInput(placeholder: String, text: String, onTextChange: (String) -> Unit
             .width(287.dp)
             .height(56.dp)
             .background(Color.Transparent)
-            .border(2.dp, color = Color.Black, shape = RoundedCornerShape(10.dp)),
+            .border(2.dp, color = Color.Black, shape = RoundedCornerShape(10.dp))
+            .onKeyEvent {
+                if (it.nativeKeyEvent.keyCode == KeyEvent.KEYCODE_ENTER || it.nativeKeyEvent.keyCode == KeyEvent.KEYCODE_TAB || it.nativeKeyEvent.keyCode == KeyEvent.KEYCODE_NAVIGATE_NEXT) {
+                    focusManager.moveFocus(FocusDirection.Next)
+                }
+                false
+            },
         keyboardActions = KeyboardActions(onDone = {
             focusManager.moveFocus(FocusDirection.Next)
         }),

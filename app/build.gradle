@@ -7,7 +7,7 @@ plugins {
 
 android {
     namespace 'com.example.login.form'
-    compileSdk 33
+    compileSdk 32
 
     defaultConfig {
         applicationId "com.example.login.form"
